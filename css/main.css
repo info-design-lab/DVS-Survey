@@ -1,0 +1,67 @@
+@font-face {
+  font-family: Roboto Condensed;
+  src: url('fonts/RobotoCondensed-Regular.ttf');
+}
+
+body, html{
+  font-family: 'Roboto Condensed', sans-serif;
+  margin: 0;
+  padding: 10px;
+  overflow-x: hidden;
+}
+
+.column1 {
+  float: left;
+  width: 80%;
+}
+
+.column2 {
+  float: left;
+  width: 20%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.cover{
+  width: 1200px;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 1200px) {
+      .cover {
+         width: 100%;
+      }
+   }
+
+.d3-tip {
+  line-height: 1;
+  padding: 15px;
+  background: #fff;
+  border-radius: 1px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  opacity: 0.9;
+  position: absolute;
+  z-index: 10;
+  visibility: hidden;
+}
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+.row{
+  overflow-y: hidden;
+}
+
+.line {
+  fill: none;
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
