@@ -50,66 +50,37 @@ function makeOrdinalVis(error, data){
     var visualization_data = getCategoricalData();
     var max_value = visualization_data.d1[0][1];
     var max_height = width/(visualization_data.d1.length);
+    var vis_svg = svg.append('g')
 
-    for(var i in visualization_data.d1){
-        var w = Math.sqrt(visualization_data.d1[i][1]/max_value)*max_height;
-        
-        var g = svg.append("g")
-            .attr("transform", "translate(" + (i*max_height + max_height/2) + ", 0)");
-
-        g.append("text")
-            .attr("x", 0)
-            .attr("y", max_height + 4)
-            .attr("text-anchor", "middle")
-            .attr("alignment-baseline", "hanging")
-            .attr("dominant-baseline", "hanging")
-            .text(visualization_data.d1[i][0]);
-
-        if(question2 !== ""){
-            treemap.size([w, w]);
-
-            var root = d3.hierarchy(visualization_data.d2[i], (d) => d.children).sum((d) => d["count"]);
-            var tree = treemap(root);
-            var node = g.datum(root).selectAll(".node")
-                        .data(tree.leaves())
-                        .enter().append("rect")
-                        .attr("x", (d) => d.x0 - w/2)
-                        .attr("y", function(d, i){
-                            return max_height - d.y0 - Math.max(0, d.y1 - d.y0  - 1);
-                        })
-                        .attr("width", (d) => Math.max(0, d.x1 - d.x0 - 1))
-                        .attr("height", (d) => Math.max(0, d.y1 - d.y0  - 1))
-                        .attr("fill", (d, i) => diverging_pallete1[i]);
-
-        } else{  
-            g.append("rect")
-                .attr("x", -w/2)
-                .attr("y", max_height - w)
-                .attr("width", w)
-                .attr("height", w)
-                .attr("fill", sequential_pallete1[i]);
-        }
+    // Drop Down
+    var select2_data = [];
+    for(var i in category_questions){
+        select2_data.push({
+            id: i,
+            text: category_questions[i]
+        })
     }
+    $('#question1-selection').select2({
+        data: select2_data
+    });
+    $('#question1-selection').val(category_questions.indexOf(question1)).trigger("change");
+    $('#question2-selection').select2();
 
-    // Legend
-    const legend_width = 200;
-    if(question2 !== ""){
-        var category2 = visualization_data.d2[0]["children"]
-        for(var i in category2){
-            svg.append("rect")
-                .attr("x", width - legend_width)
-                .attr("y", max_height + 50 + parseInt(i)*25)
-                .attr("width", 20)
-                .attr("height", 20)
-                .attr("fill", diverging_pallete1[i]);
-            svg.append("text")
-                .attr("x", width - legend_width + 25)
-                .attr("y", max_height + 50 + parseInt(i)*25 + 10)
-                .attr("alignment-baseline", "middle")
-                .attr("dominant-baseline", "middle")
-                .text(category2[i]["name"])
-        }
-    }
+    setSecondDropdownData();
+    updateVisualization();
+
+    $('#question1-selection').on('select2:select', function (e) {
+        question1 = e.params.data.text;
+        setSecondDropdownData();
+        updateVisualization();
+    });
+
+    $('#question2-selection').on('select2:select', function (e) {
+        question2 = e.params.data.text;
+        if(question2 == "None") question2 = "";
+        updateVisualization();
+    });
+
 
     function frequency(array){
         var result = {}
@@ -216,9 +187,99 @@ function makeOrdinalVis(error, data){
         };
     }
 
-}
+    function setSecondDropdownData(){
+        var list_data = [];
+        list_data.push({
+            id: 0,
+            text: "None"
+        });
 
-function updateVisualization(){
+        for(var i in category_questions){
+            if(category_questions[i] !== question1){
+                list_data.push({
+                    id: parseInt(i) + 1,
+                    text: category_questions[i]
+                });
+            }
+        }
+
+        $('#question2-selection').empty().select2({
+            data: list_data
+        });
+        $('#question2-selection').val(category_questions.indexOf(question2) + 1).trigger("change");
+    }
+
+    function updateVisualization(){
+        visualization_data = getCategoricalData();
+        vis_svg.transition().duration(500).style("opacity", 0)
+            .on("end", function(){
+                vis_svg.remove();
+                vis_svg = svg.append("g").style("opacity", 0);
+
+                for(var i in visualization_data.d1){
+                    var w = Math.sqrt(visualization_data.d1[i][1]/max_value)*max_height;
+                    
+                    var g = vis_svg.append("g")
+                        .attr("transform", "translate(" + (i*max_height + max_height/2) + ", 0)");
+
+                    g.append("text")
+                        .attr("x", 0)
+                        .attr("y", max_height + 4)
+                        .attr("text-anchor", "middle")
+                        .attr("alignment-baseline", "hanging")
+                        .attr("dominant-baseline", "hanging")
+                        .text(visualization_data.d1[i][0]);
+
+                    if(question2 !== ""){
+                        treemap.size([w, w]);
+
+                        var root = d3.hierarchy(visualization_data.d2[i], (d) => d.children).sum((d) => d["count"]);
+                        var tree = treemap(root);
+                        var node = g.datum(root).selectAll(".node")
+                                    .data(tree.leaves())
+                                    .enter().append("rect")
+                                    .attr("x", (d) => d.x0 - w/2)
+                                    .attr("y", function(d, i){
+                                        return max_height - d.y0 - Math.max(0, d.y1 - d.y0  - 1);
+                                    })
+                                    .attr("width", (d) => Math.max(0, d.x1 - d.x0 - 1))
+                                    .attr("height", (d) => Math.max(0, d.y1 - d.y0  - 1))
+                                    .attr("fill", (d, i) => diverging_pallete1[i]);
+
+                    } else{  
+                        g.append("rect")
+                            .attr("x", -w/2)
+                            .attr("y", max_height - w)
+                            .attr("width", w)
+                            .attr("height", w)
+                            .attr("fill", sequential_pallete1[i]);
+                    }
+                }
+
+                // Legend
+                const legend_width = 200;
+                if(question2 !== ""){
+                    var category2 = visualization_data.d2[0]["children"]
+                    for(var i in category2){
+                        vis_svg.append("rect")
+                            .attr("x", width - legend_width)
+                            .attr("y", max_height + 50 + parseInt(i)*25)
+                            .attr("width", 20)
+                            .attr("height", 20)
+                            .attr("fill", diverging_pallete1[i]);
+                        vis_svg.append("text")
+                            .attr("x", width - legend_width + 25)
+                            .attr("y", max_height + 50 + parseInt(i)*25 + 10)
+                            .attr("alignment-baseline", "middle")
+                            .attr("dominant-baseline", "middle")
+                            .text(category2[i]["name"])
+                    }
+                }
+
+                vis_svg.transition().duration(500).style("opacity", 1)
+
+            });
+    }
 
 }
 
