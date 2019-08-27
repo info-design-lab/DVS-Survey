@@ -8,6 +8,7 @@ var question1_category_limit = 7;
 var question2_category_limit = 10;
 var sequential_pallete1 = ['#08306b', '#08519c', '#2171b5', '#4292c6', '#6baed6', '#9ecae1', '#c6dbef', '#deebf7', '#f7fbff'];
 var diverging_pallete1 = ['#a50026','#d73027','#f46d43','#fdae61','#fee090','#ffffbf','#e0f3f8','#abd9e9','#74add1','#4575b4','#313695'];
+var treemap = d3.treemap().size([1, 1]);
 
 function makeOrdinalVis(error, data){
   	if(error){
@@ -27,8 +28,6 @@ function makeOrdinalVis(error, data){
         .attr("height", height + svg_margin.top + svg_margin.bottom)
         .append("g")
         .attr("transform", "translate(" + svg_margin.left + ", " + svg_margin.top + ")");
-
-    var treemap = d3.treemap().size([width, height]);
 
     data.forEach(function(response){   
         for(var question in response){
@@ -136,8 +135,11 @@ function makeOrdinalVis(error, data){
         a1 = [];
         a2 = [];
         for(var i in data){
-            a1.push.apply(a1, data[i][question1]);
-            if(question2 != "") a2.push.apply(a2, data[i][question2]);
+            if(data[i][question1] != "") a1.push.apply(a1, data[i][question1]);
+            if(data[i][question2] != ""){
+                if(question2 != "") a2.push.apply(a2, data[i][question2]);
+            }
+            
         }
 
         f1 = frequency(a1);
@@ -213,6 +215,10 @@ function makeOrdinalVis(error, data){
             d2: result2
         };
     }
+
+}
+
+function updateVisualization(){
 
 }
 

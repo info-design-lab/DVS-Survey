@@ -12,13 +12,14 @@ body, html{
 
 .column1 {
   float: left;
-  width: 80%;
+  width: 45%;
 }
 
 .column2 {
-  float: left;
-  width: 20%;
+  float: right;
+  width: 45%;
 }
+
 
 /* Clear floats after the columns */
 .row:after {
@@ -64,4 +65,15 @@ body, html{
   fill: none;
   stroke-width: 3px;
   stroke-linejoin: round;
+}
+
+
+.select2-selection--single {
+  font-size: 1.4em;
+  height: 100px !important;
+}
+.select2-selection__rendered{
+  word-wrap: break-word !important;
+  text-overflow: inherit !important;
+  white-space: normal !important;
 }
