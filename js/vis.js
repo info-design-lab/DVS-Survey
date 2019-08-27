@@ -212,7 +212,7 @@ function makeOrdinalVis(error, data){
 
     function updateVisualization(){
         visualization_data = getCategoricalData();
-        max_value = visualization_data.d1[0][1];
+        max_value = d3.max(visualization_data.d1, function(d){return d[1]})
         max_height = width/(visualization_data.d1.length);
 
         vis_svg.transition().duration(500).style("opacity", 0)

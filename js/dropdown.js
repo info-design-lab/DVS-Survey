@@ -31,7 +31,7 @@ var category_questions = [
     "How would you describe your relationship with stakeholders?",
     "I have adequate resources to explore the data visualization options I want to use. ",
     "If you could change one thing about your data visualization work what would it be?",
-    "What do you think other people in your organization just don’t get about the data visualization work that you do?",
+    //"What do you think other people in your organization just don’t get about the data visualization work that you do?",
     //"I want to make better visualizations but don’t have the time/energy/resources.",
     //"I’m always on the lookout for new data visualization tools and techniques that will make my workflows faster and more efficient.",
     //"My skills hold me back much more than my tools do.",
