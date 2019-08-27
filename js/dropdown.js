@@ -30,7 +30,6 @@ var category_questions = [
     "What does your audience use your data visualization for? Select all that apply.",
     "How would you describe your relationship with stakeholders?",
     "I have adequate resources to explore the data visualization options I want to use. ",
-    "What is your biggest frustration with doing data visualization in your job?",
     "If you could change one thing about your data visualization work what would it be?",
     "What do you think other people in your organization just don’t get about the data visualization work that you do?",
     //"I want to make better visualizations but don’t have the time/energy/resources.",
