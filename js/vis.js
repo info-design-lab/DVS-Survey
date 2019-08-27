@@ -3,7 +3,7 @@ queue()
     .await(makeOrdinalVis);
 
 var question1 = "What country do you live in?";
-var question2 = "What is your educational background";
+var question2 = "What's your gender identity?";
 var question1_category_limit = 7;
 var question2_category_limit = 10;
 var sequential_pallete1 = ['#08306b', '#08519c', '#2171b5', '#4292c6', '#6baed6', '#9ecae1', '#c6dbef', '#deebf7', '#f7fbff'];
@@ -31,25 +31,23 @@ function makeOrdinalVis(error, data){
 
     data.forEach(function(response){   
         for(var question in response){
-            if(question.indexOf("Select all that apply.") > 0){ // multiple selection
+            if(!isNaN(response[question]) && response[question]!== ""){
+                response[question] = parseInt(response[question]);
+            } else{
+                if(response[question] == undefined){
+                    response[question] = []
+                    continue;
+                }
+
                 var categories = response[question].replace(/ *\([^)]*\) */g, "").split(",");
                 for(var i in categories){
                     categories[i] = categories[i].trim();
                 }
-                response[question] = categories
-            } else{ // single selection or numerical 
-                if(!isNaN(response[question]) && response[question]!== ""){
-                    response[question] = parseInt(response[question]);
-                } else{
-                    response[question] = [response[question]];
-                }
+                response[question] = categories;
             }
         }
     });
 
-    var visualization_data = getCategoricalData();
-    var max_value = visualization_data.d1[0][1];
-    var max_height = width/(visualization_data.d1.length);
     var vis_svg = svg.append('g')
 
     // Drop Down
@@ -141,12 +139,15 @@ function makeOrdinalVis(error, data){
         for(var d in data){
             for(var j in data[d][question1]){
                 key1 = data[d][question1][j];
-                if(Object.keys(result).indexOf(key1) < 0) key1 = "Others";
+                if(key1 == "") continue;
+                else if(Object.keys(result).indexOf(key1) < 0) key1 = "Others";
+                
 
                 if(question2 !== ""){
                     for(var k in data[d][question2]){
                         key2 = data[d][question2][k];
-                        if(Object.keys(result[key1]).indexOf(key2) < 0) key2 = "Others";
+                        if(key2 == "") continue;
+                        else if(Object.keys(result[key1]).indexOf(key2) < 0) key2 = "Others";
 
                         result[key1][key2] += 1;
                     }
@@ -211,6 +212,9 @@ function makeOrdinalVis(error, data){
 
     function updateVisualization(){
         visualization_data = getCategoricalData();
+        max_value = visualization_data.d1[0][1];
+        max_height = width/(visualization_data.d1.length);
+
         vis_svg.transition().duration(500).style("opacity", 0)
             .on("end", function(){
                 vis_svg.remove();
