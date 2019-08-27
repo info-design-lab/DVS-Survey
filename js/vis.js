@@ -214,6 +214,7 @@ function makeOrdinalVis(error, data){
         visualization_data = getCategoricalData();
         max_value = d3.max(visualization_data.d1, function(d){return d[1]})
         max_height = width/(visualization_data.d1.length);
+        if(max_height > 400) max_height = 400;
 
         vis_svg.transition().duration(500).style("opacity", 0)
             .on("end", function(){
@@ -261,18 +262,17 @@ function makeOrdinalVis(error, data){
                 }
 
                 // Legend
-                const legend_width = 200;
                 if(question2 !== ""){
                     var category2 = visualization_data.d2[0]["children"]
                     for(var i in category2){
                         vis_svg.append("rect")
-                            .attr("x", width - legend_width)
+                            .attr("x", 0)
                             .attr("y", max_height + 50 + parseInt(i)*25)
                             .attr("width", 20)
                             .attr("height", 20)
                             .attr("fill", diverging_pallete1[i]);
                         vis_svg.append("text")
-                            .attr("x", width - legend_width + 25)
+                            .attr("x",  25)
                             .attr("y", max_height + 50 + parseInt(i)*25 + 10)
                             .attr("alignment-baseline", "middle")
                             .attr("dominant-baseline", "middle")
