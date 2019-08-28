@@ -9,6 +9,7 @@ var question2_category_limit = 10;
 var sequential_pallete1 = ['#08306b', '#08519c', '#2171b5', '#4292c6', '#6baed6', '#9ecae1', '#c6dbef', '#deebf7', '#f7fbff'];
 var diverging_pallete1 = ['#a50026','#d73027','#f46d43','#fdae61','#fee090','#ffffbf','#e0f3f8','#abd9e9','#74add1','#4575b4','#313695'];
 var treemap = d3.treemap().size([1, 1]);
+var selected_legend_index = null;
 
 function makeOrdinalVis(error, data){
   	if(error){
@@ -249,7 +250,20 @@ function makeOrdinalVis(error, data){
                                     })
                                     .attr("width", (d) => Math.max(0, d.x1 - d.x0 - 1))
                                     .attr("height", (d) => Math.max(0, d.y1 - d.y0  - 1))
-                                    .attr("fill", (d, i) => diverging_pallete1[i]);
+                                    .attr("fill", (d, i) => diverging_pallete1[i])
+                                    .on("mouseover", function(d, i){
+                                        d3.select("#legend_" + selected_legend_index)
+                                            .attr("font-weight", "normal");
+
+                                        selected_legend_index = i;
+                                        d3.select("#legend_" + selected_legend_index)
+                                            .attr("font-weight", "bold");
+                                    })
+                                    .on("mouseour", function(){
+                                        d3.select("#legend_" + selected_legend_index)
+                                            .attr("font-weight", "normal");
+                                        selected_legend_index = null;
+                                    })
 
                     } else{  
                         g.append("rect")
@@ -274,6 +288,7 @@ function makeOrdinalVis(error, data){
                         vis_svg.append("text")
                             .attr("x",  25)
                             .attr("y", max_height + 50 + parseInt(i)*25 + 10)
+                            .attr("id", (d, e) => "legend_" + i)
                             .attr("alignment-baseline", "middle")
                             .attr("dominant-baseline", "middle")
                             .text(category2[i]["name"])
