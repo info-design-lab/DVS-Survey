@@ -23,7 +23,7 @@ function makeOrdinalVis(error, data){
         right: 50
     };
     const width = document.getElementById("ordinal-vis").offsetWidth - svg_margin.left - svg_margin.right;
-    const height = 800;
+    const height = 500;
     var svg = d3.select("#ordinal-vis").append("svg")
         .attr("width", width + svg_margin.left + svg_margin.right)
         .attr("height", height + svg_margin.top + svg_margin.bottom)
