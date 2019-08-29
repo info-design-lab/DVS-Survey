@@ -2,14 +2,15 @@ queue()
     .defer(d3.csv, 'data/cleaned_survey_results_2019.csv')
     .await(makeOrdinalVis);
 
-var question1 = "What country do you live in?";
-var question2 = "What's your gender identity?";
+var question1 = "Have you studied data visualization in school (or other formal environment) or did you learn how to do it on your own?";
+var question2 = "";
 var question1_category_limit = 7;
 var question2_category_limit = 10;
 var sequential_pallete1 = ['#08306b', '#08519c', '#2171b5', '#4292c6', '#6baed6', '#9ecae1', '#c6dbef', '#deebf7', '#f7fbff'];
 var diverging_pallete1 = ['#a50026','#d73027','#f46d43','#fdae61','#fee090','#ffffbf','#e0f3f8','#abd9e9','#74add1','#4575b4','#313695'];
 var treemap = d3.treemap().size([1, 1]);
 var selected_legend_index = null;
+const font_size = 15;
 
 function makeOrdinalVis(error, data){
   	if(error){
@@ -23,7 +24,7 @@ function makeOrdinalVis(error, data){
         right: 50
     };
     const width = document.getElementById("ordinal-vis").offsetWidth - svg_margin.left - svg_margin.right;
-    const height = 500;
+    const height = 700;
     var svg = d3.select("#ordinal-vis").append("svg")
         .attr("width", width + svg_margin.left + svg_margin.right)
         .attr("height", height + svg_margin.top + svg_margin.bottom)
@@ -228,12 +229,14 @@ function makeOrdinalVis(error, data){
                     var g = vis_svg.append("g")
                         .attr("transform", "translate(" + (i*max_height + max_height/2) + ", 0)");
 
-                    g.append("text")
-                        .attr("x", 0)
-                        .attr("y", max_height + 4)
-                        .attr("text-anchor", "middle")
-                        .attr("alignment-baseline", "hanging")
-                        .attr("dominant-baseline", "hanging")
+                    g.append("foreignObject")
+                        .attr("x", -max_height/2)
+                        .attr("y", max_height + 20) 
+                        .attr("width", max_height) // replace with width you want 
+                        .attr("height", 100)// replace with height you want
+                        .append("xhtml:div")// replace with html element you want
+                        .attr("class", "center")
+                        .append("p")
                         .text(visualization_data.d1[i][0]);
 
                     if(question2 !== ""){
@@ -301,6 +304,7 @@ function makeOrdinalVis(error, data){
     }
 
 }
+
 
 String.prototype.replaceAll = function(search, replacement) {
     var target = this;

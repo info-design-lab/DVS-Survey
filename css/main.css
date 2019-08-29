@@ -33,6 +33,10 @@ body, html{
   margin: 0 auto;
 }
 
+.center {
+  text-align: center;
+}
+
 @media screen and (max-width: 1200px) {
       .cover {
          width: 100%;
