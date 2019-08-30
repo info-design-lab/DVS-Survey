@@ -12,7 +12,7 @@ var category_questions = [
     "How is your organization using data visualization? Select all that apply.",
     "Is there a separate group dedicated to creating data visualization or are data visualization specialists embedded in another group? (data science, UX, UI, web, data engineering, IT, etc)",
     "What modes of data visualization are in use at your organization? Select all that apply.",
-    "Leadership in your organization has a strong understanding of the value of data visualization.",
+    // "Leadership in your organization has a strong understanding of the value of data visualization.",
     "Data visualization at your organization features prominently in what parts of the organization? Select all that apply.",
     //"Hours a week focused on creating/implementing/productizing data visualizations?",
     //"Hours a week focused on data engineering?",
