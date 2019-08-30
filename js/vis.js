@@ -2,8 +2,8 @@ queue()
     .defer(d3.csv, 'data/cleaned_survey_results_2019.csv')
     .await(makeOrdinalVis);
 
-var question1 = "Have you studied data visualization in school (or other formal environment) or did you learn how to do it on your own?";
-var question2 = "";
+var question1 = "Are you able to choose your own tools or are the choices made for you?";
+var question2 = "How do you present your data visualizations? Select all that apply.";
 var question1_category_limit = 7;
 var question2_category_limit = 10;
 var sequential_pallete1 = ['#08306b', '#08519c', '#2171b5', '#4292c6', '#6baed6', '#9ecae1', '#c6dbef', '#deebf7', '#f7fbff'];
@@ -217,6 +217,7 @@ function makeOrdinalVis(error, data){
         max_value = d3.max(visualization_data.d1, function(d){return d[1]})
         max_height = width/(visualization_data.d1.length);
         if(max_height > 400) max_height = 400;
+        var legend_offset = 0;
 
         vis_svg.transition().duration(500).style("opacity", 0)
             .on("end", function(){
@@ -224,20 +225,23 @@ function makeOrdinalVis(error, data){
                 vis_svg = svg.append("g").style("opacity", 0);
 
                 for(var i in visualization_data.d1){
-                    var w = Math.sqrt(visualization_data.d1[i][1]/max_value)*max_height;
+                    var w = Math.sqrt(visualization_data.d1[i][1]/max_value)*max_height - 10;
                     
                     var g = vis_svg.append("g")
                         .attr("transform", "translate(" + (i*max_height + max_height/2) + ", 0)");
 
-                    g.append("foreignObject")
+                    var div = g.append("foreignObject")
                         .attr("x", -max_height/2)
-                        .attr("y", max_height + 20) 
+                        .attr("y", max_height + 5) 
                         .attr("width", max_height) // replace with width you want 
                         .attr("height", 100)// replace with height you want
                         .append("xhtml:div")// replace with html element you want
                         .attr("class", "center")
                         .append("p")
                         .text(visualization_data.d1[i][0]);
+
+                    if($(div._groups[0][0]).innerHeight() > legend_offset) legend_offset = $(div._groups[0][0]).innerHeight() 
+
 
                     if(question2 !== ""){
                         treemap.size([w, w]);
@@ -284,13 +288,13 @@ function makeOrdinalVis(error, data){
                     for(var i in category2){
                         vis_svg.append("rect")
                             .attr("x", 0)
-                            .attr("y", max_height + 50 + parseInt(i)*25)
+                            .attr("y", max_height + 50 + parseInt(i)*25 + legend_offset)
                             .attr("width", 20)
                             .attr("height", 20)
                             .attr("fill", diverging_pallete1[i]);
                         vis_svg.append("text")
                             .attr("x",  25)
-                            .attr("y", max_height + 50 + parseInt(i)*25 + 10)
+                            .attr("y", max_height + 50 + parseInt(i)*25 + 10 + legend_offset)
                             .attr("id", (d, e) => "legend_" + i)
                             .attr("alignment-baseline", "middle")
                             .attr("dominant-baseline", "middle")
