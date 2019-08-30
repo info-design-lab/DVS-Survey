@@ -242,7 +242,6 @@ function makeOrdinalVis(error, data){
 
                     if($(div._groups[0][0]).innerHeight() > legend_offset) legend_offset = $(div._groups[0][0]).innerHeight() 
 
-
                     if(question2 !== ""){
                         treemap.size([w, w]);
 
@@ -266,7 +265,7 @@ function makeOrdinalVis(error, data){
                                         d3.select("#legend_" + selected_legend_index)
                                             .attr("font-weight", "bold");
                                     })
-                                    .on("mouseour", function(){
+                                    .on("mouseout", function(){
                                         d3.select("#legend_" + selected_legend_index)
                                             .attr("font-weight", "normal");
                                         selected_legend_index = null;
