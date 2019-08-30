@@ -8,7 +8,7 @@ var category_questions = [
     "Do you do more or less data visualization than you expected for this role?",
     "Which one of these is the closest to describing your role?",
     "What is your yearly pay?",
-    "What is your hourly rate?",
+    // "What is your hourly rate?",
     "How is your organization using data visualization? Select all that apply.",
     "Is there a separate group dedicated to creating data visualization or are data visualization specialists embedded in another group? (data science, UX, UI, web, data engineering, IT, etc)",
     "What modes of data visualization are in use at your organization? Select all that apply.",
