@@ -2,8 +2,9 @@ queue()
     .defer(d3.csv, 'data/cleaned_survey_results_2019.csv')
     .await(makeOrdinalVis);
 
-var question1 = "Are you able to choose your own tools or are the choices made for you?";
-var question2 = "How do you present your data visualizations? Select all that apply.";
+var question1 = "Have you studied data visualization in school (or other formal environment) or did you learn how to do it on your own?";
+var question2 = "";
+var question2_index = 0;
 var question1_category_limit = 7;
 var question2_category_limit = 10;
 var sequential_pallete1 = ['#08306b', '#08519c', '#2171b5', '#4292c6', '#6baed6', '#9ecae1', '#c6dbef', '#deebf7', '#f7fbff'];
@@ -51,32 +52,49 @@ function makeOrdinalVis(error, data){
     });
 
     var vis_svg = svg.append('g')
-
+    var parent_ids = 32;
+    var children_ids = 0;
     // Drop Down
     var select2_data = [];
-    for(var i in category_questions){
-        select2_data.push({
-            id: i,
-            text: category_questions[i]
-        })
+    for(var category in category_questions){
+        d = {
+            id: parent_ids++,
+            text: category,
+            children: []
+        }
+
+
+        for(var j in category_questions[category]){
+            d.children.push({
+                id: children_ids++,
+                text: category_questions[category][j]
+            });
+        }
+
+        select2_data.push(d);
     }
+
+
     $('#question1-selection').select2({
         data: select2_data
     });
-    $('#question1-selection').val(category_questions.indexOf(question1)).trigger("change");
+    $('#question1-selection').val(0).trigger("change");
     $('#question2-selection').select2();
 
     setSecondDropdownData();
+    $('#question2-selection').val(question2_index).trigger("change");
     updateVisualization();
 
     $('#question1-selection').on('select2:select', function (e) {
         question1 = e.params.data.text;
+        
         setSecondDropdownData();
         updateVisualization();
     });
 
     $('#question2-selection').on('select2:select', function (e) {
         question2 = e.params.data.text;
+        question2_index = e.params.data.id;
         if(question2 == "None") question2 = "";
         updateVisualization();
     });
@@ -191,25 +209,39 @@ function makeOrdinalVis(error, data){
     }
 
     function setSecondDropdownData(){
-        var list_data = [];
-        list_data.push({
-            id: 0,
-            text: "None"
-        });
+        var parent_ids = 32;
+        var children_ids = 0;
 
-        for(var i in category_questions){
-            if(category_questions[i] !== question1){
-                list_data.push({
-                    id: parseInt(i) + 1,
-                    text: category_questions[i]
+        var select2_data = [];
+        select2_data.push({
+            id: children_ids++,
+            text: "None"
+        })
+
+        for(var category in category_questions){
+            d = {
+                id: parent_ids++,
+                text: category,
+                children: []
+            }
+
+
+            for(var j in category_questions[category]){
+                d.children.push({
+                    id: children_ids++,
+                    text: category_questions[category][j]
                 });
             }
+
+            select2_data.push(d);
         }
 
+
         $('#question2-selection').empty().select2({
-            data: list_data
+            data: select2_data
         });
-        $('#question2-selection').val(category_questions.indexOf(question2) + 1).trigger("change");
+        $('#question2-selection').val(question2_index).trigger("change");
+
     }
 
     function updateVisualization(){
@@ -225,7 +257,7 @@ function makeOrdinalVis(error, data){
                 vis_svg = svg.append("g").style("opacity", 0);
 
                 for(var i in visualization_data.d1){
-                    var w = Math.sqrt(visualization_data.d1[i][1]/max_value)*max_height - 10;
+                    var w = Math.sqrt(visualization_data.d1[i][1]/max_value)*max_height;
                     
                     var g = vis_svg.append("g")
                         .attr("transform", "translate(" + (i*max_height + max_height/2) + ", 0)");

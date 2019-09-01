@@ -81,3 +81,11 @@ body, html{
   text-overflow: inherit !important;
   white-space: normal !important;
 }
+
+.select2-container, .select2-dropdown, .select2-search, .select2-results {
+-webkit-transition: none !important;
+-moz-transition: none !important;
+-ms-transition: none !important;
+-o-transition: none !important;
+transition: none !important;
+}
