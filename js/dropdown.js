@@ -17,7 +17,7 @@ var category_questions = {
         "Data visualization at your organization features prominently in what parts of the organization? Select all that apply.",
         "The organization you work for is in which of the following areas?",
     ],
-    "Practice Related Questions": [
+    "Practices / Methods / Tools": [
         "What technologies do you use to visualize data? Select all that apply.",
         "Are you able to choose your own tools or are the choices made for you?",
         "How do you present your data visualizations? Select all that apply.",
