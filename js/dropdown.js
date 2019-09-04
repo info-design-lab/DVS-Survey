@@ -30,8 +30,8 @@ var category_questions = {
     ],
     "Challenges / Hopes / Wishes": [
         "I have adequate resources to explore the data visualization options I want to use. ",
-        "If you could change one thing about your data visualization work what would it be?",
-         "Do you want to spend more time or less time visualizing data in the future?",
+        //"If you could change one thing about your data visualization work what would it be?",
+        "Do you want to spend more time or less time visualizing data in the future?",
     ],
     "Demographics": [
         "What's your gender identity?",
