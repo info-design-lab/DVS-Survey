@@ -4,6 +4,7 @@ queue()
 
 var question1 = "Have you studied data visualization in school (or other formal environment) or did you learn how to do it on your own?";
 var question2 = "";
+var question1_index = 0;
 var question2_index = 0;
 var question1_category_limit = 7;
 var question2_category_limit = 10;
@@ -52,43 +53,21 @@ function makeOrdinalVis(error, data){
     });
 
     var vis_svg = svg.append('g')
-    var parent_ids = 32;
-    var children_ids = 0;
-    // Drop Down
-    var select2_data = [];
-    for(var category in category_questions){
-        d = {
-            id: parent_ids++,
-            text: category,
-            children: []
-        }
 
 
-        for(var j in category_questions[category]){
-            d.children.push({
-                id: children_ids++,
-                text: category_questions[category][j]
-            });
-        }
 
-        select2_data.push(d);
-    }
-
-
-    $('#question1-selection').select2({
-        data: select2_data
-    });
-    $('#question1-selection').val(0).trigger("change");
+    $('#question1-selection').select2();
     $('#question2-selection').select2();
 
-    setSecondDropdownData();
-    $('#question2-selection').val(question2_index).trigger("change");
+    setDropdownData();
     updateVisualization();
 
+
     $('#question1-selection').on('select2:select', function (e) {
-        question1 = e.params.data.text;
-        
-        setSecondDropdownData();
+        question1 = e.params.data.text;   
+        question1_index = e.params.data.id;
+
+        setDropdownData();
         updateVisualization();
     });
 
@@ -96,6 +75,8 @@ function makeOrdinalVis(error, data){
         question2 = e.params.data.text;
         question2_index = e.params.data.id;
         if(question2 == "None") question2 = "";
+
+        setDropdownData();
         updateVisualization();
     });
 
@@ -208,15 +189,43 @@ function makeOrdinalVis(error, data){
         };
     }
 
-    function setSecondDropdownData(){
+    function setDropdownData(){
+        console.log(question2)
         var parent_ids = 32;
         var children_ids = 0;
+        var select2_data = [];
+        for(var category in category_questions){
+            d = {
+                id: parent_ids++,
+                text: category,
+                children: []
+            }
 
+            for(var j in category_questions[category]){
+                if(category_questions[category][j] == question2) continue;
+                d.children.push({
+                    id: children_ids++,
+                    text: category_questions[category][j]
+                });
+            }
+
+            select2_data.push(d);
+        }
+
+        $('#question1-selection').empty().select2({
+            data: select2_data
+        });
+        $('#question1-selection').val(question1_index).trigger("change");
+
+
+
+        var parent_ids = 32;
+        var children_ids = 0;
         var select2_data = [];
         select2_data.push({
             id: children_ids++,
             text: "None"
-        })
+        });
 
         for(var category in category_questions){
             d = {
@@ -227,6 +236,7 @@ function makeOrdinalVis(error, data){
 
 
             for(var j in category_questions[category]){
+                if(category_questions[category][j] == question1) continue;
                 d.children.push({
                     id: children_ids++,
                     text: category_questions[category][j]
