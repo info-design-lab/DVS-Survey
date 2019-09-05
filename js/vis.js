@@ -62,7 +62,6 @@ function makeOrdinalVis(error, data){
     setDropdownData();
     updateVisualization();
 
-
     $('#question1-selection').on('select2:select', function (e) {
         question1 = e.params.data.text;   
         question1_index = e.params.data.id;
@@ -79,6 +78,21 @@ function makeOrdinalVis(error, data){
         setDropdownData();
         updateVisualization();
     });
+
+    $("#exchange_image").on("click", function(d){
+        if(question2 == "") return;
+
+        var dummy = question1;
+        question1 = question2;
+        question2 = dummy;
+
+        dummy = question1_index;
+        question1_index = question2_index - 1;
+        question2_index = dummy + 1;
+
+        setDropdownData();
+        updateVisualization();
+    })
 
 
     function frequency(array){
@@ -190,7 +204,6 @@ function makeOrdinalVis(error, data){
     }
 
     function setDropdownData(){
-        console.log(question2)
         var parent_ids = 32;
         var children_ids = 0;
         var select2_data = [];

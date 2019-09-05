@@ -20,6 +20,14 @@ body, html{
   width: 45%;
 }
 
+.column3 {
+  float: left;
+  width: 10%;
+}
+
+#exchange_image{
+  cursor: pointer;
+}
 
 /* Clear floats after the columns */
 .row:after {
