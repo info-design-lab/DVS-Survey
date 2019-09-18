@@ -13,6 +13,8 @@ var diverging_pallete1 = ['#a50026','#d73027','#f46d43','#fdae61','#fee090','#ff
 var treemap = d3.treemap().size([1, 1]);
 var selected_legend_index = null;
 const font_size = 15;
+var circle_rotate = 0;
+
 
 function makeOrdinalVis(error, data){
   	if(error){
@@ -90,7 +92,19 @@ function makeOrdinalVis(error, data){
         question1_index = question2_index - 1;
         question2_index = dummy + 1;
 
-        setDropdownData();
+        // rotate the div
+        circle_rotate += 180;
+        $("#exchange_image").css("transform", "rotate(" + circle_rotate + "deg)");
+
+        $(".column1").animate({opacity: 0}, 500, function(){
+             setDropdownData();
+
+             $(".column1").animate({opacity: 1}, 500);
+             $(".column2").animate({opacity: 1}, 500);
+        })
+        $(".column2").animate({opacity: 0}, 500)
+
+       
         updateVisualization();
     })
 
