@@ -232,6 +232,7 @@ function makeOrdinalVis(error, data){
 
             for(var j in category_questions[category]){
                 if(category_questions[category][j] == question2) continue;
+                if(category_questions[category][j] == question1) question1_index = children_ids
                 d.children.push({
                     id: children_ids++,
                     text: category_questions[category][j]
@@ -245,8 +246,6 @@ function makeOrdinalVis(error, data){
             data: select2_data
         });
         $('#question1-selection').val(question1_index).trigger("change");
-
-
 
         var parent_ids = 32;
         var children_ids = 0;
@@ -266,6 +265,7 @@ function makeOrdinalVis(error, data){
 
             for(var j in category_questions[category]){
                 if(category_questions[category][j] == question1) continue;
+                if(category_questions[category][j] == question2) question2_index = children_ids
                 d.children.push({
                     id: children_ids++,
                     text: category_questions[category][j]
