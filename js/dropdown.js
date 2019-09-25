@@ -29,8 +29,8 @@ var category_questions = {
         "How would you describe your relationship with stakeholders?",
     ],
     "Challenges / Hopes / Wishes": [
-        "I have adequate resources to explore the data visualization options I want to use. ",
-        //"If you could change one thing about your data visualization work what would it be?",
+        // "I have adequate resources to explore the data visualization options I want to use.",
+        // "If you could change one thing about your data visualization work what would it be?",
         "Do you want to spend more time or less time visualizing data in the future?",
     ],
     "Demographics": [
