@@ -35,7 +35,8 @@ function makeOrdinalVis(error, data){
         .append("g")
         .attr("transform", "translate(" + svg_margin.left + ", " + svg_margin.top + ")");
 
-    data.forEach(function(response){   
+    data.forEach(function(response){  
+
         for(var question in response){
             if(!isNaN(response[question]) && response[question]!== ""){
                 response[question] = parseInt(response[question]);
@@ -47,7 +48,10 @@ function makeOrdinalVis(error, data){
 
                 var categories = response[question].replace(/ *\([^)]*\) */g, "").split(",");
                 for(var i in categories){
-                    categories[i] = categories[i].trim();
+                    categories[i] = categories[i].trim().toLowerCase()
+                                        .split(' ')
+                                        .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+                                        .join(' ');
                 }
                 response[question] = categories;
             }
@@ -55,8 +59,6 @@ function makeOrdinalVis(error, data){
     });
 
     var vis_svg = svg.append('g')
-
-
 
     $('#question1-selection').select2();
     $('#question2-selection').select2();
@@ -103,7 +105,6 @@ function makeOrdinalVis(error, data){
              $(".column2").animate({opacity: 1}, 500);
         })
         $(".column2").animate({opacity: 0}, 500)
-
        
         updateVisualization();
     })
@@ -128,6 +129,7 @@ function makeOrdinalVis(error, data){
     }
 
     function getCategoricalData(){
+
         var result = {};
 
         a1 = [];
@@ -137,7 +139,6 @@ function makeOrdinalVis(error, data){
             if(data[i][question2] != ""){
                 if(question2 != "") a2.push.apply(a2, data[i][question2]);
             }
-            
         }
 
         f1 = frequency(a1);
@@ -148,11 +149,12 @@ function makeOrdinalVis(error, data){
         for(var i = 0; i < question1_category_limit && i < f1.length; i++){
             category1.push(f1[i][0]);
         }
-        if(category1.length == question1_category_limit) category1.push("Others");
+        if(category1.length == question1_category_limit && category1.length !== f1.length) category1.push("Others");
+
         for(var i = 0; i < question2_category_limit && i < f2.length; i++){
             category2.push(f2[i][0]);
         }
-        if(category2.length == question2_category_limit) category2.push("Others");
+        if(category2.length == question2_category_limit && category2.length !== f2.length) category2.push("Others");
 
         for(var i in category1){
             result[category1[i]] = 0;
